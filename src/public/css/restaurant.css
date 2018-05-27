@@ -27,14 +27,14 @@
 /* Add a color to all links inside the list */
 
 #breadcrumb li a {
-    color: #026CC8;
+    color: #1E71A9;
     text-decoration: none;
 }
 
 /* Add a color on mouse-over */
 
 #breadcrumb li a:hover {
-    color: #01447e;
+    color: #1E71A9;
     text-decoration: underline;
 }
 

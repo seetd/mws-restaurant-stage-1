@@ -5,7 +5,7 @@
 .filter-options {
     width: 100%;
     height: 50px;
-    background-color: #3397DB;
+    background-color: #217CB9;
     align-items: center;
     display: -webkit-box;
     /* OLD - iOS 6-, Safari 3.1-6, BB7 */
@@ -76,7 +76,7 @@
 }
 
 #restaurants-list li h1 {
-    color: #f18200;
+    color: #B26000;
     font-family: Arial, sans-serif;
     font-size: 1.4em;
     font-weight: 200;
@@ -91,7 +91,7 @@
 }
 
 #restaurants-list li a {
-    background-color: orange;
+    background-color: #B26000;
     border-bottom: 3px solid #eee;
     color: #fff;
     display: inline-block;
