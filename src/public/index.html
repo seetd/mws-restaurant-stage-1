@@ -12,21 +12,29 @@
 <body>
   <header>
     <nav>
-      <h1><a href="/">Restaurant Reviews</a></h1>
+      <a href="/" aria-label="Restaurant Reviews">
+        <h1>
+          <svg width="500px" height="80px">
+            <use xlink:href="img/logo.svg#logo" height="64px" y="8px" />
+            <text class="title" x="100px" y="72px">
+              Restaurant Reviews
+            </text>
+          </svg>
+        </h1>
+      </a>
     </nav>
   </header>
-
   <main id="maincontent">
     <section id="map-container">
       <div id="map"></div>
     </section>
     <section>
       <div class="filter-options">
-        <h2>Filter Results</h2>
-        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+        <h2 id="filter-results">Filter Results</h2>
+        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-labelledby="filter-results">
           <option value="all">All Neighborhoods</option>
         </select>
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-labelledby="filter-results">
           <option value="all">All Cuisines</option>
         </select>
       </div>
@@ -40,13 +48,16 @@
   <!-- Main javascript file -->
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
   <!-- Google Maps -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initMap"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=[GOOGLE_API_KEY]&libraries=places&callback=initMap"></script>
   <!-- End scripts -->
 
   <footer id="footer">
-    Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    Copyright (c) 2017
+    <a href="/">
+      <strong>Restaurant Reviews</strong>
+    </a> All Rights Reserved.
   </footer>
- 
+
 </body>
 
 </html>

@@ -1,0 +1,30 @@
+{
+  "name": "mws-restaurant-stage-1",
+  "version": "1.0.0",
+  "description": "--- #### _Three Stage Course Material Project - Restaurant Reviews_",
+  "dependencies": {
+    "express": "^4.16.3",
+    "nodemon": "^1.17.4"
+  },
+  "devDependencies": {
+    "del": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-image-resize": "^0.13.0",
+    "gulp-rename": "^1.2.3",
+    "gulp-replace": "^1.0.0"
+  },
+  "scripts": {
+    "start:dev": "node ./build/index.js",
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seetd/mws-restaurant-stage-1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seetd/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/seetd/mws-restaurant-stage-1#readme"
+}

@@ -1,0 +1,139 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* ====================== Restaurant Filtering ====================== */
+.filter-options {
+    width: 100%;
+    height: 50px;
+    background-color: #3397DB;
+    align-items: center;
+    display: -webkit-box;
+    /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+    display: -ms-flexbox;
+    /* TWEENER - IE 10 */
+    display: -webkit-flex;
+    /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+    display: flex;
+    /* NEW, Spec - Firefox, Chrome, Opera */
+    flex-wrap: wrap;
+    -webkit-wrap: wrap;
+}
+
+.filter-options h2 {
+    color: white;
+    font-size: 1rem;
+    font-weight: normal;
+    line-height: 1;
+    margin: 0 20px;
+}
+
+.filter-options select {
+    background-color: white;
+    border: 1px solid #fff;
+    font-family: Arial, sans-serif;
+    font-size: 1.1em;
+    height: 35px;
+    letter-spacing: 0;
+    margin: 10px;
+    padding: 0 10px;
+    width: auto;
+}
+
+/* ====================== Restaurant Listing ====================== */
+
+#restaurants-list {
+    background-color: #f3f3f3;
+    list-style: outside none none;
+    margin: 0;
+    text-align: center;
+    display: -webkit-box;
+    /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+    display: -ms-flexbox;
+    /* TWEENER - IE 10 */
+    display: -webkit-flex;
+    /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+    display: flex;
+    /* NEW, Spec - Firefox, Chrome, Opera */
+    flex-wrap: wrap;
+    -webkit-wrap: wrap;
+}
+
+#restaurants-list li {
+    background-color: #fff;
+    min-height: 380px;
+    padding: 25px 30px;
+    text-align: left;
+    max-width: 100%;
+}
+
+#restaurants-list .restaurant-img {
+    background-color: #ccc;
+    display: block;
+    margin: 0;
+    max-width: 100%;
+    min-height: 248px;
+    min-width: 100%;
+}
+
+#restaurants-list li h1 {
+    color: #f18200;
+    font-family: Arial, sans-serif;
+    font-size: 1.4em;
+    font-weight: 200;
+    letter-spacing: 0;
+    line-height: 1.3;
+    margin: 20px 0 10px;
+    text-transform: uppercase;
+}
+
+#restaurants-list p {
+    margin: 0;
+}
+
+#restaurants-list li a {
+    background-color: orange;
+    border-bottom: 3px solid #eee;
+    color: #fff;
+    display: inline-block;
+    margin: 15px 0 0;
+    padding: 8px 30px 10px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+#map {
+    height: 400px;
+}
+
+ul,
+menu,
+dir {
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-start: 0;
+    padding: 0;
+}
+
+@media screen and (min-width: 600px) {
+    #restaurants-list li {
+        margin: 15px;
+        max-width: calc(50% - 90px);
+        /* padding: 30px, margin: 15px */
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    #restaurants-list li {
+        max-width: calc(33.333% - 90px);
+        /* padding: 30px, margin: 15px */
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .filter-options h2 {
+        width: 100%
+    }
+}
