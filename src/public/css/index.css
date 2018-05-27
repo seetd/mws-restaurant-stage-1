@@ -4,7 +4,7 @@
 /* ====================== Restaurant Filtering ====================== */
 .filter-options {
     width: 100%;
-    height: 50px;
+    height: auto;
     background-color: #217CB9;
     align-items: center;
     display: -webkit-box;
@@ -31,7 +31,7 @@
     background-color: white;
     border: 1px solid #fff;
     font-family: Arial, sans-serif;
-    font-size: 1.1em;
+    font-size: 0.9em;
     height: 35px;
     letter-spacing: 0;
     margin: 10px;
@@ -136,4 +136,10 @@ dir {
     .filter-options h2 {
         width: 100%
     }
+}
+
+@media screen and (min-width: 360px) {
+    .filter-options select {
+        font-size: 1.1em;
+    }    
 }
