@@ -137,23 +137,32 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
+  li.tabIndex = "0";
+  li.setAttribute("aria-label", "Restaurant Details");
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  image.alt = restaurant.photo_description;
+  image.alt = restaurant.photograph_description;
+  image.tabIndex = "0";
   li.append(image);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
+  name.setAttribute("aria-label", `name ${restaurant.name}`);
+  name.tabIndex = "0";
   li.append(name);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
+  neighborhood.setAttribute("aria-label", `neighborhood ${restaurant.neighborhood}`);
+  neighborhood.tabIndex = "0";
   li.append(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
+  address.setAttribute("aria-label", `address ${restaurant.address}`);
+  address.tabIndex = "0";
   li.append(address);
 
   const more = document.createElement('a');

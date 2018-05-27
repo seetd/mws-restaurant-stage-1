@@ -43,14 +43,23 @@ li {
 }
 
 a {
-  color: orange;
+  color: #B26000;
   text-decoration: none;
 }
 
 a:hover,
 a:focus {
-  color: #3397db;
+  color: #2D95DA;
   text-decoration: none;
+}
+
+footer a {
+  color: #D87500;
+}
+
+footer a:hover,
+footer a:focus {
+  color: #207BB8;
 }
 
 a img {
@@ -86,8 +95,8 @@ section {
 }
 
 #footer {
-  background-color: #444;
-  color: #aaa;
+  background-color: #252831;
+  color: #B1B1B1;
   font-size: 0.8em;
   letter-spacing: 0.1em;
   padding: 25px 0;

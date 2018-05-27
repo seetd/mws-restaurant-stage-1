@@ -12,7 +12,7 @@ window.initMap = () => {
       self.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 16,
         center: restaurant.latlng,
-        scrollwheel: false
+        scrollwheel: false,
       });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
@@ -51,16 +51,23 @@ fetchRestaurantFromURL = (callback) => {
 fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
+  name.tabIndex = "0";
+  name.setAttribute("aria-label", `Name ${restaurant.name}`);
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
+  address.tabIndex = "0";
+  address.setAttribute("aria-label", `Address ${restaurant.address}`);
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.alt = restaurant.photograph_description;
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
+  cuisine.tabIndex = "0";
+  cuisine.setAttribute("aria-label", `Cuisine ${restaurant.cuisine_type}`);
 
   // fill operating hours
   if (restaurant.operating_hours) {
@@ -75,9 +82,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
+  hours.setAttribute("aria-label", "restaurant hours");
+  hours.tabIndex = "0";
   for (let key in operatingHours) {
     const row = document.createElement('tr');
-
+    row.tabIndex = "0";
     const day = document.createElement('td');
     day.innerHTML = key;
     row.appendChild(day);
@@ -95,6 +104,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
+  container.tabIndex = "0";
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
@@ -118,6 +128,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 createReviewHTML = (review) => {
   const li = document.createElement('li');
   const name = document.createElement('p');
+  li.tabIndex = "0";
   name.innerHTML = review.name;
   li.appendChild(name);
 

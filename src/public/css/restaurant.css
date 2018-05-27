@@ -27,7 +27,7 @@
 /* Add a color to all links inside the list */
 
 #breadcrumb li a {
-    color: #0275d8;
+    color: #026CC8;
     text-decoration: none;
 }
 
@@ -49,12 +49,12 @@ section {
     display: grid;
     display: -ms-grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 320px calc(100% - 320px);
+    grid-template-rows: auto auto auto;
     position: relative;
     overflow: scroll;
-    grid-template-areas: 
-        "map-container"
-        "restaurant-wrapper";
+    grid-template-areas:
+        "restaurant-wrapper"
+        "map-container";
 }
 
 #restaurant-wrapper {
@@ -66,6 +66,14 @@ section {
     grid-area: map-container;
     min-height: 100%;
     overflow: hidden;
+}
+
+#restaurant-container {
+    grid-area: restaurant-container
+}
+
+#reviews-container {
+    grid-area: reviews-container
 }
 
 #restaurant-container,
@@ -82,7 +90,7 @@ section {
 }
 
 #restaurant-name {
-    color: #f18200;
+    color: #B26000;
     font-family: Arial, sans-serif;
     font-size: 2em;
     font-weight: 200;
@@ -112,7 +120,7 @@ section {
 }
 
 #reviews-container h2 {
-    color: #f58500;
+    color: #B26000;
     font-size: 2em;
     font-weight: 300;
     letter-spacing: -1px;
@@ -135,6 +143,10 @@ section {
 
 #restaurant-hours td {
     color: #666;
+}
+
+#restaurant-container label {
+    display: none;
 }
 
 @media screen and (min-width: 800px) {
