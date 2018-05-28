@@ -15,7 +15,6 @@ body {
   background-color: #fdfdfd;
   margin: 0;
   width: 100%;
-  display: -ms-grid;
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto;

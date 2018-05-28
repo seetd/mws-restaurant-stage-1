@@ -44,7 +44,6 @@ section {
     width: 100%;
     height: 100vh;
     display: grid;
-    display: -ms-grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
     position: relative;
