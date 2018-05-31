@@ -1,6 +1,10 @@
 let restaurant;
 var map;
 
+window.addEventListener('load', () => {
+  new ServiceWorkerController();  
+});
+
 /**
  * Initialize Google map, called from HTML.
  */
@@ -13,6 +17,9 @@ window.initMap = () => {
         zoom: 16,
         center: restaurant.latlng,
         scrollwheel: false,
+      });
+      google.maps.event.addListenerOnce(self.map, 'idle', function(){
+        document.getElementsByTagName('iframe')[0].title = "Google Maps"
       });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
@@ -63,6 +70,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.className = 'restaurant-img'
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.alt = restaurant.photograph_description;
+  image.tabIndex = "0";
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -104,7 +112,6 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  container.tabIndex = "0";
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
   container.appendChild(title);

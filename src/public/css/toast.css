@@ -1,0 +1,44 @@
+#toast-container {
+    width: 300px;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+    background-color: #217CB9;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    padding: 10px;
+}
+
+#toast-container h2, #toast-container div {
+    color: #FFF;
+    margin: 10px;
+}
+
+#toast-container button {
+    color: #FFF;
+    display: inline-block;
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+#toast-refresh {
+    background-color: #B26000;
+}
+
+#toast-close {
+    background-color: #2C8800;
+    
+}
+
+#toast-container button:hover, #toast-container button:focus {
+    color: #000;
+}
+
+#toast-container[aria-hidden="false"] {
+    transform: translateY(0%);
+    opacity: 1;
+}

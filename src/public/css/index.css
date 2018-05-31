@@ -83,6 +83,10 @@
     text-transform: uppercase;
 }
 
+#restaurants-list li a:hover, #restaurants-list li a:focus {
+    color: #000;
+}
+
 #map {
     height: 400px;
 }
@@ -90,11 +94,6 @@
 ul,
 menu,
 dir {
-    -webkit-margin-before: 0;
-    -webkit-margin-after: 0;
-    -webkit-margin-start: 0;
-    -webkit-margin-end: 0;
-    -webkit-padding-start: 0;
     padding: 0;
 }
 

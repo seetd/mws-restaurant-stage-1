@@ -24,7 +24,8 @@ const build_html = () => {
 const build_css_source = (source) => {
     return gulp.src([
             `${dirs.src}/public/css/styles.css`,
-            `${dirs.src}/public/css/${source}.css`
+            `${dirs.src}/public/css/${source}.css`,
+            `${dirs.src}/public/css/toast.css`
         ])
         .pipe(clean_css({ sourceMap: true }))
         .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9'))
@@ -39,10 +40,9 @@ const build_css = gulp.series(build_css_index, build_css_restaurant);
 
 const copy_static = () => {
     return gulp.src([
-        `${dirs.src}/public/js/*`,
-        `${dirs.src}/public/data/*`,
+        `${dirs.src}/public/**/*.json`,
         `${dirs.src}/public/img/*`,
-        `${dirs.src}/*.js`
+        `${dirs.src}/**/*.js`
     ],  {base: dirs.src}) 
     .pipe(gulp.dest(`${dirs.dest}`));
 };

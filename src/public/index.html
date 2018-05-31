@@ -3,8 +3,13 @@
 
 <head>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+  <meta name="theme-color" content="#B26000" />
+  <meta name="Description" content="Summaries showing the list of restaurant reviews in the selection area.">
+  <!-- External css: Normalize.css for better cross-browser consistency, toastr for creating toasts on the screen -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.css" />
+  <!-- Main CSS file -->
   <link rel="stylesheet" href="css/index.min.css">
+  <link rel="manifest" href="manifest.json">
   <title>Restaurant Reviews</title>
 </head>
 
@@ -42,14 +47,19 @@
   </main>
 
   <!-- Beginning scripts -->
+  <!-- Minified version of `es6-promise-auto` below. -->
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js" defer></script>
+  <!-- Toast javascript file -->
+  <script type="text/javascript" src="js/toast.js" defer></script>
+  <!-- Service worker installer -->
+  <script type="text/javascript" src="service_worker_controller.js" defer></script>
   <!-- Database helpers -->
-  <script type="text/javascript" src="js/dbhelper.js"></script>
+  <script type="text/javascript" src="js/dbhelper.js" defer></script>
   <!-- Main javascript file -->
-  <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
-  <!-- service worker installer -->
-  <script type="application/javascript" charset="utf-8" src="js/service_worker_installer.js"></script>
+  <script type="text/javascript" src="js/main.js" defer></script>
   <!-- Google Maps -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=[GOOGLE_API_KEY]&libraries=places&callback=initMap"></script>
+  <script defer src="https://maps.googleapis.com/maps/api/js?key=[GOOGLE_API_KEY]&libraries=places&callback=initMap"></script>
   <!-- End scripts -->
 
   <footer id="footer">

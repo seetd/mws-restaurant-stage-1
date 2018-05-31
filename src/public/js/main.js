@@ -1,8 +1,12 @@
 let restaurants,
   neighborhoods,
-  cuisines
-var map
-var markers = []
+  cuisines;
+var map;
+var markers = [];
+
+window.addEventListener('load', () => {
+  new ServiceWorkerController();  
+});
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -80,6 +84,11 @@ window.initMap = () => {
     center: loc,
     scrollwheel: false
   });
+
+  google.maps.event.addListenerOnce(self.map, 'idle', function(){
+    document.getElementsByTagName('iframe')[0].title = "Google Maps"
+  });
+
   updateRestaurants();
 }
 
