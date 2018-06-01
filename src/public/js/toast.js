@@ -1,3 +1,6 @@
+// Simple javascript that is custom to only show Toasts to indicate that an application update is available
+// An open source generic version could be used as well but this gives me an opportunity to learn how to build
+// an accessible widget. It also removes the risk of plagiarism
 function Toast() {
     const toast = this;
 
