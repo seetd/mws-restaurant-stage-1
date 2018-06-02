@@ -2,17 +2,18 @@ function ServiceWorkerController() {
     const toast = new Toast();
 
     const updateReady = (worker) => {
-        const lastFocus = document.activeElement;
         toast.refresh.then(() => {
             worker.postMessage({
                 updated: true
             });
-            lastFocus.focus();
+            document.getElementById("home-link").focus();
         });
-        
-        setTimeout(() => {
-            toast.show();
-        }, 500);
+
+        toast.dismiss.then(() => {
+            document.getElementById("home-link").focus();
+        });
+
+        toast.show();
     };
 
     const trackInstalling = (worker) => {

@@ -63,7 +63,7 @@ self.addEventListener('fetch', function (event) {
     var requestUrl = new URL(event.request.url);
     if (requestUrl.origin === location.origin) {
         if (requestUrl.pathname === '/') {
-            event.respondWith(caches.match('/index.html'));
+            event.respondWith(caches.match('index.html'));
             return;
         }
     }
@@ -76,3 +76,4 @@ self.addEventListener('message', function (event) {
         self.skipWaiting();
     }
 });
+//

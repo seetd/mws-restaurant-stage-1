@@ -1,56 +1,125 @@
 // Simple javascript that is custom to only show Toasts to indicate that an application update is available
 // An open source generic version could be used as well but this gives me an opportunity to learn how to build
-// an accessible widget. It also removes the risk of plagiarism
+// an accessible widget. It also removes the risk of plagiarism.
 function Toast() {
+    const KEY_TAB = 9;
+    const KEY_ESC = 27;
     const toast = this;
-
     const containerEl = document.createElement('div');
+    const headerEl = document.createElement('h2');
+    const messageEl = document.createElement('div');
+    const refreshEl = document.createElement('button');
+    const dismissEl = document.createElement('button');
+    const overlayEl = document.createElement('div');
+
+    const focusableItems = [refreshEl, dismissEl];
+
+    let activeFocus = 0;
+
+    this.refresh = new Promise(function (resolve) {
+        toast._refreshResolver = resolve;
+    });
+
+
+    this.dismiss = new Promise(function (resolve) {
+        toast._dismissResolver = resolve;
+    });
+
+    const close = () => {
+        containerEl.setAttribute('aria-hidden', 'true');
+        overlayEl.classList.remove('toast-closed');
+    }
+
     containerEl.id = 'toast-container';
     containerEl.setAttribute('role', 'dialog');
     containerEl.setAttribute('aria-hidden', 'true');
     containerEl.setAttribute('aria-labelledby', 'toast-title');
     containerEl.setAttribute('aria-describedby', 'toast-text');
     containerEl.tabIndex = -1;
+    containerEl.addEventListener('keydown', (event) => {
+        const handleForwardTab = () => {
+            event.preventDefault();
+            if (activeFocus === focusableItems.length - 1) {
+                activeFocus = 0;
+            } else {
+                activeFocus += 1;
+            }
+            focusableItems[activeFocus].focus();
+        };
 
-    const headerEl = document.createElement('h2');
+        const handleBackTab = () => {
+            event.preventDefault();
+            if (activeFocus === 0) {
+                activeFocus = focusableItems.length - 1 ;
+            } else {
+                activeFocus -= 1;
+            }
+            focusableItems[activeFocus].focus();
+        };
+
+        switch (event.keyCode) {
+            case KEY_TAB:
+                if (focusableItems.length === 1) {
+                    event.preventDefault();
+                    break;
+                }
+
+                if (event.shiftKey) {
+                    handleBackwardTab();
+                } else {
+                    handleForwardTab();
+                }
+                break;
+            case KEY_ESC:
+                event.preventDefault();
+                close();
+                if (this._dismissResolver) this._dismissResolver();
+                break;
+            default:
+                break;
+        }
+    });
+
     headerEl.id = 'toast-title';
     headerEl.innerText = 'Application Update';
+    headerEl.tabIndex = -1;
 
-    const messageEl = document.createElement('div');
     messageEl.id = 'toast-text';
     messageEl.innerText = 'New version available';
+    messageEl.tabIndex = -1;
 
-    const refreshEl = document.createElement('button');
     refreshEl.innerText = 'Refresh';
     refreshEl.id = 'toast-refresh';
 
-    const dismissEl = document.createElement('button');
     dismissEl.innerText = 'Close';
     dismissEl.id = 'toast-close';
 
-    this.refresh = new Promise(function(resolve) {
-        toast._refreshResolver = resolve;
-    });
-
     this.show = () => {
         containerEl.setAttribute('aria-hidden', 'false');
-        containerEl.focus();
+        overlayEl.classList.add('toast-closed');
+        activeFocus = 0;
+        focusableItems[activeFocus].focus();
     }
 
     dismissEl.onclick = () => {
-        containerEl.setAttribute('aria-hidden', 'true');
+        close();
+        if (this._dismissResolver) this._dismissResolver();
     }
 
     refreshEl.onclick = () => {
-        containerEl.setAttribute('aria-hidden', 'true');
+        close();
         if (this._refreshResolver) this._refreshResolver();
     }
+
+    overlayEl.id = 'toast-overlay';
+    overlayEl.tabIndex = -1;
+    overlayEl.setAttribute('aria-hidden', 'true');
 
     containerEl.appendChild(headerEl);
     containerEl.appendChild(messageEl);
     containerEl.appendChild(refreshEl);
     containerEl.appendChild(dismissEl);
     document.body.appendChild(containerEl);
-
+    document.body.appendChild(overlayEl);
     return toast;
 }
