@@ -1,11 +1,11 @@
 const staticCacheName = 'rr-static-v1';
-const dynamicCache = 'rr-dynamic';
+const dynamicCacheName = 'rr-dynamic';
 
 const staticUrls = [
     'index.html',
     'restaurant.html',
     'service_worker_controller.js',
-    'js/toast.js',    
+    'js/toast.js',
     'js/dbhelper.js',
     'js/main.js',
     'js/restaurant_info.js',
@@ -18,22 +18,30 @@ const staticUrls = [
 ];
 
 const allCaches = [
-    staticCacheName, dynamicCache
+    staticCacheName, dynamicCacheName
 ];
 
 function loadCacheOrNetwork(request) {
-    return caches.open(dynamicCache).then(function(cache) {
-      return cache.match(request.url)
-        .then(function(response) {
-          var networkFetch = fetch(request).then(function(networkResponse) {
-            cache.put(request.url, networkResponse.clone());
-            return networkResponse;
-          });
-  
-          return response || networkFetch;
+    const loadDynamicCacheOrNetwork = caches.open(dynamicCacheName)
+        .then((cache) => {
+            return cache.match(request)
+                .then(response => {
+                    const networkLoader = fetch(request).then(function (networkResponse) {
+                        cache.put(request.url, networkResponse.clone());
+                        return networkResponse;
+                    });
+                    return response || networkLoader;
+                })
         });
-    });
-  }
+
+    return caches.open(staticCacheName)
+        .then((cache) => {
+            return cache.match(request)
+                .then(response => {
+                    return response || loadDynamicCacheOrNetwork;
+                });
+        });
+}
 
 self.addEventListener('install', function (event) {
     event.waitUntil(
@@ -60,12 +68,17 @@ self.addEventListener('activate', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
-    var requestUrl = new URL(event.request.url);
+    const requestUrl = new URL(event.request.url);
     if (requestUrl.origin === location.origin) {
         if (requestUrl.pathname === '/') {
             event.respondWith(caches.match('index.html'));
             return;
         }
+
+        if (requestUrl.pathname.startsWith('/restaurant.html')) {
+            event.respondWith(caches.match('restaurant.html'));
+            return;
+        } 
     }
 
     event.respondWith(loadCacheOrNetwork(event.request));
@@ -76,4 +89,3 @@ self.addEventListener('message', function (event) {
         self.skipWaiting();
     }
 });
-//
