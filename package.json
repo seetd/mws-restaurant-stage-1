@@ -16,9 +16,11 @@
     "gulp-rename": "^1.2.3",
     "gulp-replace": "^1.0.0"
   },
+  "main": "index.js",
   "scripts": {
     "start:dev": "node ./build/index.js",
-    "build": "gulp"
+    "build": "gulp",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
