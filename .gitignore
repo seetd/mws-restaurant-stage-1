@@ -1,6 +1,8 @@
 # project specific
 keys.config.json
 build
+darren.seet.me
+build_ssl
 
 # Logs
 logs

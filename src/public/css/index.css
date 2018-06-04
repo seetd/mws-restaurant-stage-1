@@ -100,15 +100,13 @@ dir {
 @media screen and (min-width: 600px) {
     #restaurants-list li {
         margin: 15px;
-        max-width: calc(50% - 90px);
-        /* padding: 30px, margin: 15px */
+        max-width: calc(50% - 90px); /* 90px = padding: 30px, margin: 15px */
     }
 }
 
 @media screen and (min-width: 1000px) {
     #restaurants-list li {
-        max-width: calc(33.333% - 90px);
-        /* padding: 30px, margin: 15px */
+        max-width: calc(33.333% - 90px); /* 90px = padding: 30px, margin: 15px */
     }
 }
 

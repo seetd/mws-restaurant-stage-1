@@ -6,7 +6,7 @@ function Toast() {
     const KEY_ESC = 27;
     const toast = this;
     const containerEl = document.createElement('div');
-    const headerEl = document.createElement('h2');
+    const headerEl = document.createElement('h3');
     const messageEl = document.createElement('div');
     const refreshEl = document.createElement('button');
     const dismissEl = document.createElement('button');
@@ -16,27 +16,16 @@ function Toast() {
 
     let activeFocus = 0;
 
-    this.refresh = new Promise(function (resolve) {
-        toast._refreshResolver = resolve;
+    this.refresh = new Promise((resolve) => {
+        this._refreshResolver = resolve;
     });
 
 
-    this.dismiss = new Promise(function (resolve) {
-        toast._dismissResolver = resolve;
+    this.dismiss = new Promise((resolve) =>  {
+        this._dismissResolver = resolve;
     });
 
-    const close = () => {
-        containerEl.setAttribute('aria-hidden', 'true');
-        overlayEl.classList.remove('toast-closed');
-    }
-
-    containerEl.id = 'toast-container';
-    containerEl.setAttribute('role', 'dialog');
-    containerEl.setAttribute('aria-hidden', 'true');
-    containerEl.setAttribute('aria-labelledby', 'toast-title');
-    containerEl.setAttribute('aria-describedby', 'toast-text');
-    containerEl.tabIndex = -1;
-    containerEl.addEventListener('keydown', (event) => {
+    const keyHandler = (event) => {
         const handleForwardTab = () => {
             event.preventDefault();
             if (activeFocus === focusableItems.length - 1) {
@@ -78,15 +67,26 @@ function Toast() {
             default:
                 break;
         }
-    });
+    }
+
+    const close = () => {
+        containerEl.setAttribute('aria-hidden', 'true');
+        overlayEl.setAttribute('aria-hidden', 'true');
+    }
+
+    containerEl.id = 'toast-container';
+    containerEl.setAttribute('role', 'dialog');
+    containerEl.setAttribute('aria-hidden', 'true');
+    containerEl.setAttribute('aria-labelledby', 'toast-title');
+    containerEl.setAttribute('aria-describedby', 'toast-text');
+    containerEl.tabIndex = -1;
+    containerEl.addEventListener('keydown', keyHandler);
 
     headerEl.id = 'toast-title';
     headerEl.innerText = 'Application Update';
-    headerEl.tabIndex = -1;
 
     messageEl.id = 'toast-text';
     messageEl.innerText = 'New version available';
-    messageEl.tabIndex = -1;
 
     refreshEl.innerText = 'Refresh';
     refreshEl.id = 'toast-refresh';
@@ -96,7 +96,7 @@ function Toast() {
 
     this.show = () => {
         containerEl.setAttribute('aria-hidden', 'false');
-        overlayEl.classList.add('toast-closed');
+        overlayEl.setAttribute('aria-hidden', 'false');
         activeFocus = 0;
         focusableItems[activeFocus].focus();
     }
@@ -114,6 +114,7 @@ function Toast() {
     overlayEl.id = 'toast-overlay';
     overlayEl.tabIndex = -1;
     overlayEl.setAttribute('aria-hidden', 'true');
+    overlayEl.addEventListener('keydown', keyHandler);
 
     containerEl.appendChild(headerEl);
     containerEl.appendChild(messageEl);

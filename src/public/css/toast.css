@@ -11,6 +11,7 @@
     padding: 10px;
     margin: -80px 0 0 -150px;
     z-index: 1000;
+    display: none;
 }
 
 #toast-overlay {
@@ -24,7 +25,7 @@
     display: none;
 }
 
-#toast-container h2, #toast-container div {
+#toast-container h3, #toast-container div {
     color: #FFF;
     margin: 10px;
 }
@@ -55,13 +56,9 @@
 #toast-container[aria-hidden="false"] {
     transform: translateY(0%);
     opacity: 1;
+    display: block;
 }
 
-#toast-container[aria-hidden="false"] {
-    transform: translateY(0%);
-    opacity: 1;
-}
-
-#toast-overlay.toast-closed {
+#toast-overlay[aria-hidden="false"] {
     display: block;
 }

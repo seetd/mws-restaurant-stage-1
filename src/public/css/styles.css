@@ -109,6 +109,12 @@ nav {
   text-align: left;
 }
 
+nav a {
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+}
+
 nav h1 {
   margin: auto;
 }
