@@ -5,7 +5,7 @@ var map;
 var markers = [];
 
 window.addEventListener('load', () => {
-  new ServiceWorkerController();  
+  new ServiceWorkerController();
 });
 
 /**
@@ -85,8 +85,8 @@ window.initMap = () => {
     scrollwheel: false
   });
 
-  google.maps.event.addListenerOnce(self.map, 'idle', function(){
-    document.getElementsByTagName('iframe')[0].title = "Google Maps"
+  google.maps.event.addListenerOnce(self.map, 'idle', () => {
+    document.getElementsByTagName('iframe')[0].title = "Google Maps";
   });
 
   updateRestaurants();

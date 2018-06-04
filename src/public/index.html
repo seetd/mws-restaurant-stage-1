@@ -16,7 +16,7 @@
 <body>
   <header>
     <nav>
-      <a href="/" aria-label="Restaurant Reviews" id="home-link">
+      <a href="/" aria-label="home link" id="home-link">
         <h1>
           <svg width="500px" height="80px">
             <use xlink:href="img/logo.svg#logo" height="64px" y="8px" />
@@ -29,11 +29,11 @@
     </nav>
   </header>
   <main id="maincontent">
-    <section id="map-container">
-      <div id="map" role="application" aria-label="map of restaurants in neighborhood"></div>
+    <section id="map-container" aria-label="map of restaurants in neighborhood">
+      <div id="map" role="application"></div>
     </section>
-    <section>
-      <div class="filter-options">
+    <section aria-label="restaurants listings">
+      <div class="filter-options" aria-label="filter options for restaurants">
         <h2 id="filter-results">Filter Results</h2>
         <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-labelledby="filter-results">
           <option value="all">All Neighborhoods</option>
@@ -59,7 +59,7 @@
   <!-- Main javascript file -->
   <script type="text/javascript" src="js/main.js" defer></script>
   <!-- Google Maps -->
-  <script defer src="https://maps.googleapis.com/maps/api/js?key=[GOOGLE_API_KEY]&libraries=places&callback=initMap"></script>
+  <script defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"></script>
   <!-- End scripts -->
 
   <footer id="footer">

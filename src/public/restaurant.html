@@ -18,7 +18,7 @@
   <header>
     <!-- Beginning nav -->
     <nav>
-      <a href="/" aria-label="Restaurant Reviews">
+      <a href="/" aria-label="home link">
         <h1>
           <svg width="500px" height="80px">
             <use xlink:href="img/logo.svg#logo" height="64px" y="8px" />
@@ -32,7 +32,7 @@
     <!-- Beginning breadcrumb -->
     <ul id="breadcrumb">
       <li>
-        <a href="/">Home</a>
+        <a href="/" aria-label="home link">Home</a>
       </li>
     </ul>
     <!-- End breadcrumb -->
@@ -44,7 +44,7 @@
   <main id="maincontent">
     <div id="restaurant-wrapper">
       <!-- Beginning restaurant -->
-      <section id="restaurant-container" tabindex="0" aria-label="Restaurant Details">
+      <section id="restaurant-container" tabindex="0" aria-label="restaurant details">
         <h1 id="restaurant-name"></h1>
         <img id="restaurant-img">
         <p id="restaurant-cuisine"></p>
@@ -53,14 +53,14 @@
       </section>
       <!-- end restaurant -->
       <!-- Beginning reviews -->
-      <section id="reviews-container">
+      <section id="reviews-container" tabindex="0" aria-label="reviews by customers">
         <ul id="reviews-list"></ul>
       </section>
       <!-- End reviews -->
     </div>
     <!-- Beginning map -->
-    <section id="map-container">
-      <div id="map" role="application" aria-label="map of restaurant location"></div>
+    <section id="map-container" aria-label="map of restaurant location">
+      <div id="map" role="application"></div>
     </section>
     <!-- End map -->
   </main>
@@ -88,7 +88,7 @@
   <!-- Main javascript file -->
   <script type="text/javascript" src="js/restaurant_info.js" defer></script>
   <!-- Google Maps -->
-  <script defer src="https://maps.googleapis.com/maps/api/js?key=[GOOGLE_API_KEY]&libraries=places&callback=initMap"></script>
+  <script defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"></script>
   <!-- End scripts -->
 
 </body>

@@ -1,4 +1,4 @@
-const staticCacheName = 'rr-static-v1';
+const staticCacheName = 'rr-static-v2';
 const dynamicCacheName = 'rr-dynamic';
 
 const staticUrls = [
