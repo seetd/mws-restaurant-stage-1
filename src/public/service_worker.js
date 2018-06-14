@@ -12,7 +12,6 @@ const staticUrls = [
     'css/index.min.css',
     'css/restaurant.min.css',
     'img/logo.svg',
-    'data/restaurants.json',
     'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
     'https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff'
 ];
@@ -21,34 +20,24 @@ const allCaches = [
     staticCacheName, dynamicCacheName
 ];
 
-function loadCacheOrNetwork(request) {
-    const loadDynamicCacheOrNetwork = caches.open(dynamicCacheName)
-        .then((cache) => {
-            return cache.match(request)
-                .then(response => {
-                    const networkLoader = fetch(request).then(function (networkResponse) {
-                        cache.put(request.url, networkResponse.clone());
-                        return networkResponse;
-                    });
-                    return response || networkLoader;
-                })
-        });
-
-    return caches.open(staticCacheName)
-        .then((cache) => {
-            return cache.match(request)
-                .then(response => {
-                    return response || loadDynamicCacheOrNetwork;
+const loadCacheOrNetwork = request => 
+    caches.match(request)
+        .then(response => response || fetch(request).then(
+            networkResponse => {
+                const responseClone = networkResponse.clone();
+                caches.open(dynamicCacheName).then(function (cache) {
+                    cache.put(request, responseClone);
                 });
-        });
-}
+                return networkResponse;
+            }
+        ));
 
 self.addEventListener('install', function (event) {
     event.waitUntil(
         caches.open(staticCacheName)
-        .then(function (cache) {
-            return cache.addAll(staticUrls);
-        })
+            .then(function (cache) {
+                return cache.addAll(staticUrls);
+            })
     );
 });
 
@@ -78,9 +67,14 @@ self.addEventListener('fetch', function (event) {
         if (requestUrl.pathname.startsWith('/restaurant.html')) {
             event.respondWith(caches.match('restaurant.html'));
             return;
-        } 
+        }
     }
 
+    if (event.request.url.startsWith('http://localhost:1337/restaurants')) {
+        // avoid caching the API calls as those will be handle by IDB
+        return;
+    }
+    
     event.respondWith(loadCacheOrNetwork(event.request));
 });
 
