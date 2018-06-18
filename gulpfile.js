@@ -1,12 +1,15 @@
 const del = require('del');
+const browserify = require('browserify');
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
 const gulp = require('gulp');
 const autoprefixer = require('gulp-autoprefixer');
 const clean_css = require('gulp-clean-css');
 const concat = require('gulp-concat');
-const image_resize = require('gulp-image-resize');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
-const GOOGLE_API_KEY = require('./keys.config.json').GOOGLE_API_KEY;
+const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify');
 
 const dirs = {
     src: 'src',
@@ -17,7 +20,6 @@ const clean = () => del(['build']);  // del requires it to be a string and not a
 
 const build_html = () => {
     return gulp.src([ `${dirs.src}/public/*.html` ])
-        .pipe(replace('[GOOGLE_API_KEY]', GOOGLE_API_KEY))
         .pipe(gulp.dest(`${dirs.dest}/public/`));
 }
 
@@ -38,16 +40,33 @@ const build_css_restaurant = () => build_css_source('restaurant');
 
 const build_css = gulp.series(build_css_index, build_css_restaurant);
 
+const build_script = (filename) => {
+    return browserify(`${dirs.src}/public/js/${filename}`)
+        .transform('babelify')
+        .bundle()
+        .pipe(source(filename))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(`${dirs.dest}/public/js`));
+}
+
+const build_script_index = () => build_script('index.js');
+const build_script_restaurant = () => build_script('restaurant.js');
+
+const build_scripts = gulp.parallel(build_script_index, build_script_restaurant);
+
 const copy_static = () => {
     return gulp.src([
         `${dirs.src}/public/**/*.json`,
         `${dirs.src}/public/img/*`,
-        `${dirs.src}/**/*.js`
+        `${dirs.src}/server.js`,
+        `${dirs.src}/public/js/service_worker.js`
     ],  {base: dirs.src}) 
     .pipe(gulp.dest(`${dirs.dest}`));
 };
 
-const build_all = gulp.series(clean, build_html, build_css, copy_static);
+const build_all = gulp.series(clean, build_html, build_css, build_scripts, copy_static);
 gulp.task('watch', () => {
     gulp.watch([dirs.src], build_all)
 });

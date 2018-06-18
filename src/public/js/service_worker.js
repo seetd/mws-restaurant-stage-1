@@ -4,11 +4,8 @@ const dynamicCacheName = 'rr-dynamic';
 const staticUrls = [
     'index.html',
     'restaurant.html',
-    'service_worker_controller.js',
-    'js/toast.js',
-    'js/dbhelper.js',
-    'js/main.js',
-    'js/restaurant_info.js',
+    'js/index.js',
+    'js/restaurant.js',
     'css/index.min.css',
     'css/restaurant.min.css',
     'img/logo.svg',
