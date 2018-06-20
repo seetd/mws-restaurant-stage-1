@@ -11,14 +11,15 @@ export default class RestaurantController {
             container: 'map',
             mapboxToken: 'pk.eyJ1Ijoib3JlZGkiLCJhIjoiY2ppZHdiNXVwMDBpODNxcXAxdjl4OWVkayJ9.COiDvF28jozGjkmEqo_AYg'
         });
+        this.dataService = new DataService(!!navigator.serviceWorker);
     }
 
     render() {
-        return DataService
-            .fetch
+        return this.dataService
+            .fetch()
             .then(restaurants => {
                 const id = parseInt(this.getParameterByName('id'));
-                const restaurant = DataService.getByRestaurantId(id, restaurants);
+                const restaurant = this.dataService.getByRestaurantId(id, restaurants);
                 if (!restaurant) {
                     throw `Restaurant Id: ${id} is not valid`
                 }
@@ -56,8 +57,8 @@ export default class RestaurantController {
 
         const image = this.document.getElementById('restaurant-img');
         image.className = 'restaurant-img'
-        image.src = DataService.imageUrlForRestaurant(restaurant);
-        image.alt = restaurant.photograph_description;
+        image.src = this.dataService.imageUrlForRestaurant(restaurant);
+        image.alt = restaurant.name;
         image.tabIndex = "0";
 
         const cuisine = this.document.getElementById('restaurant-cuisine');

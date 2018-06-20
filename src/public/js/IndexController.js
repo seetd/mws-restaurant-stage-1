@@ -21,7 +21,44 @@ export default class IndexController {
             container: 'map',
             mapboxToken: 'pk.eyJ1Ijoib3JlZGkiLCJhIjoiY2ppZHdiNXVwMDBpODNxcXAxdjl4OWVkayJ9.COiDvF28jozGjkmEqo_AYg'
         });
+        this.dataService = new DataService(!!navigator.serviceWorker);
     }
+
+    registerListener(event, func) {
+        if (this.window.addEventListener) {
+            this.window.addEventListener(event, func)
+        } else {
+            this.window.attachEvent('on' + event, func)
+        }
+    }
+
+    lazyLoad(){
+        for(var i=0; i<this.lazyImages.length; i++){
+            if(this.isInViewport(this.lazyImages[i])){
+                if (this.lazyImages[i].getAttribute('data-src')){
+                    this.lazyImages[i].src = this.lazyImages[i].getAttribute('data-src');
+                    this.lazyImages[i].removeAttribute('data-src');
+                }
+            }
+        }
+        
+        this.cleanLazy();
+    }
+    
+    cleanLazy(){
+        this.lazyImages = Array.prototype.filter.call(this.lazyImages, function(l){ return l.getAttribute('data-src');});
+    }
+
+    isInViewport(element){
+        var rect = element.getBoundingClientRect();
+        
+        return (
+            rect.bottom >= 0 && 
+            rect.right >= 0 && 
+            rect.top <= (this.window.innerHeight || this.document.documentElement.clientHeight) && 
+            rect.left <= (this.window.innerWidth || this.document.documentElement.clientWidth)
+         );
+    }    
 
     getRestaurantHTML(restaurant) {
         const li = this.document.createElement('li');
@@ -30,8 +67,9 @@ export default class IndexController {
 
         const image = this.document.createElement('img');
         image.className = 'restaurant-img';
-        image.src = DataService.imageUrlForRestaurant(restaurant);
-        image.alt = restaurant.photograph_description;
+        image.classList.add('lazy');
+        image.setAttribute('data-src', this.dataService.imageUrlForRestaurant(restaurant));
+        image.alt = restaurant.name;
         image.tabIndex = "0";
         li.append(image);
 
@@ -56,7 +94,7 @@ export default class IndexController {
         const more = this.document.createElement('a');
         more.innerHTML = 'View Details';
         more.setAttribute('aria-label', `View ${restaurant.name}`)
-        more.href = DataService.urlForRestaurant(restaurant);
+        more.href = this.dataService.urlForRestaurant(restaurant);
         li.append(more)
 
         return li;
@@ -72,10 +110,10 @@ export default class IndexController {
         const cuisine = cSelect[cIndex].value;
         const neighborhood = nSelect[nIndex].value;
 
-        return DataService
-            .fetch
+        return this.dataService
+            .fetch()
             .then(restaurants => {
-                const filtered = DataService.filterRestaurantsByCuisineAndNeighborhood(restaurants, cuisine, neighborhood)
+                const filtered = this.dataService.filterRestaurantsByCuisineAndNeighborhood(restaurants, cuisine, neighborhood)
                 resolve(filtered);
             })
             .catch(error => reject(error));     
@@ -94,7 +132,11 @@ export default class IndexController {
             restaurants => {
                 this.renderRestaurants(restaurants);
                 this.renderNeighborhoods(restaurants);
-                this.renderCuisines(restaurants);
+                this.renderCuisines(restaurants);     
+                this.lazyImages = this.document.getElementsByClassName('lazy');
+                this.lazyLoad();
+                this.registerListener('scroll', this.lazyLoad.bind(this));
+                this.registerListener('resize', this.lazyLoad.bind(this));                 
             },
             error => console.error(error)
         );
@@ -120,7 +162,7 @@ export default class IndexController {
      * @param {*} restaurants 
      */
     renderNeighborhoods(restaurants) {
-        const neighborhoods = DataService.getAllNeighbourhoods(restaurants);
+        const neighborhoods = this.dataService.getAllNeighbourhoods(restaurants);
         const select = this.document.getElementById('neighborhoods-select');
         renderSelect(this.document, select, neighborhoods, this.updateRestaurants.bind(this));
     }
@@ -131,7 +173,7 @@ export default class IndexController {
      * @param {*} restaurants 
      */
     renderCuisines(restaurants) {
-        const cuisines = DataService.getAllCuisines(restaurants);
+        const cuisines = this.dataService.getAllCuisines(restaurants);
         const select = this.document.getElementById('cuisines-select');
         renderSelect(this.document, select, cuisines, this.updateRestaurants.bind(this));
     }

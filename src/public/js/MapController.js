@@ -17,6 +17,7 @@ export default class MapController {
         this.document = document;
         this.container = container;
         this.mapboxToken = mapboxToken;
+        this.dataService = new DataService();
         this.markers = [];
     }
 
@@ -55,7 +56,7 @@ export default class MapController {
         const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng], {
             title: restaurant.name,
             alt: restaurant.name,
-            url: DataService.urlForRestaurant(restaurant)
+            url: this.dataService.urlForRestaurant(restaurant)
         })
         marker.on("click", () => {
             this.window.location.href = marker.options.url;

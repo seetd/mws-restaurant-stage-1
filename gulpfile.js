@@ -30,7 +30,7 @@ const build_css_source = (source) => {
             `${dirs.src}/public/css/toast.css`
         ])
         .pipe(clean_css({ sourceMap: true }))
-        .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9'))
+        .pipe(autoprefixer('last 2 version'))
         .pipe(concat(`${source}.min.css`))
         .pipe(gulp.dest(`${dirs.dest}/public/css`));
 }
@@ -47,6 +47,7 @@ const build_script = (filename) => {
         .pipe(source(filename))
         .pipe(buffer())
         .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(`${dirs.dest}/public/js`));
 }

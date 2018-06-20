@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "--- #### _Three Stage Course Material Project - Restaurant Reviews_",
   "dependencies": {
+    "@babel/polyfill": "^7.0.0-beta.51",
+    "compression": "^1.7.2",
     "express": "^4.16.3",
     "idb": "^2.1.2",
     "nodemon": "^1.17.4"

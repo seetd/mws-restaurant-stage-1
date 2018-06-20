@@ -3,5 +3,6 @@
     "plugins": [
         "transform-class-properties",
         "transform-html-import-to-string"
-    ]
+    ],
+    "sourceMaps": true
 }

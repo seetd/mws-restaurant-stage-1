@@ -1,4 +1,5 @@
 
+import '@babel/polyfill';
 import ServiceWorkerController from './ServiceWorkerController';
 import IndexController from './IndexController';
 
