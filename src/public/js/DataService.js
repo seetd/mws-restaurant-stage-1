@@ -4,7 +4,7 @@ const ENDPOINT = 'http://localhost:1337/restaurants';
 const database = 'rrdb';
 const storeName = 'rrdb_restaurants';
 
-const openDatabase = (supportsOffline) => {
+const openDatabase = () => {
     return idb.open(database, 1, function (upgradeDb) {
         var store = upgradeDb.createObjectStore(storeName, {
             keyPath: 'id'
@@ -138,6 +138,9 @@ export default class DataService {
      * Restaurant image URL.
      */
     imageUrlForRestaurant(restaurant) {
+        if (!restaurant.photograph)
+            return (`/img/noimage.png`);
+    
         return (`/img/${restaurant.photograph}.jpg`);
     }
 }

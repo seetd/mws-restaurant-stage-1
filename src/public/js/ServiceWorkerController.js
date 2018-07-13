@@ -20,11 +20,11 @@ export default class ServiceWorkerController {
             this.document.getElementById("home-link").focus();
         });
 
-        this.toast.show();
+        this.toast.hide('false');
     }
 
     trackInstalling(worker) {
-        worker.addEventListener('statechange', function () {
+        worker.addEventListener('statechange', () => {
             if (worker.state === 'installed') {
                 this.updateReady(worker);
             }

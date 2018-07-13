@@ -6,8 +6,6 @@ const gulp = require('gulp');
 const autoprefixer = require('gulp-autoprefixer');
 const clean_css = require('gulp-clean-css');
 const concat = require('gulp-concat');
-const rename = require('gulp-rename');
-const replace = require('gulp-replace');
 const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
 
@@ -71,6 +69,7 @@ const build_all = gulp.series(clean, build_html, build_css, build_scripts, copy_
 gulp.task('watch', () => {
     gulp.watch([dirs.src], build_all)
 });
+
 gulp.task('default', gulp.series(build_all, 'watch'), () => {
     console.log('Development started');
 });

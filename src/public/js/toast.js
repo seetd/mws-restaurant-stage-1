@@ -8,23 +8,32 @@ const KEY_ESC = 27;
 // an accessible widget. It also removes the risk of plagiarism.
 export default class Toast {
     constructor(document) {
-        this.document = document;
         const parser = new DOMParser();
-        const doc = parser.parseFromString(template, 'text/html');
-        this.containerElement = doc.getElementById('toast-container');
-        this.overlayElement = doc.getElementById('toast-overlay');
-        this.refreshElement = doc.getElementById('toast-refresh');
-        this.closeElement = doc.getElementById('toast-close');
+        const toast = parser.parseFromString(template, 'text/html');
+        this.containerElement = toast.getElementById('toast-container');
+        this.overlayElement = toast.getElementById('toast-overlay');
+        this.refreshElement = toast.getElementById('toast-refresh');
+        this.closeElement = toast.getElementById('toast-close');
         this.focusableItems = [this.refreshElement, this.closeElement];
         this.activeFocus = 0;
         this.refresh = new Promise((resolve) => {
             this._refreshResolver = resolve;
         });
-    
-    
         this.dismiss = new Promise((resolve) =>  {
             this._dismissResolver = resolve;
-        });        
+        });   
+        this.closeElement.onclick = () => {
+            this.hide('true');
+            if (this._dismissResolver) this._dismissResolver();
+        }
+    
+        this.refreshElement.onclick = () => {
+            this.hide('true');
+            if (this._refreshResolver) this._refreshResolver();
+        }
+
+        document.body.appendChild(this.containerElement);
+        document.body.appendChild(this.overlayElement);
     }
 
     keyHandler() {
@@ -63,16 +72,17 @@ export default class Toast {
                 break;
             case KEY_ESC:
                 event.preventDefault();
-                this.close();
-                if (this._dismissResolver) this._dismissResolver();
+                // Dismiss resolver should handle hide
+                if (this._dismissResolver)  this._dismissResolver();
+                this.hide('true');
                 break;
             default:
                 break;
         }        
     }
 
-    close() {
-        this.containerElement.setAttribute('aria-hidden', 'true');
-        this.overlayElement.setAttribute('aria-hidden', 'true');
-    }    
+    hide(isHidden) {
+        this.containerElement.setAttribute('aria-hidden', isHidden);
+        this.overlayElement.setAttribute('aria-hidden', isHidden);
+    }            
 }
