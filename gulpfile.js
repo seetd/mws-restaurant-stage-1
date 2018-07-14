@@ -3,10 +3,6 @@ const gulp = require('gulp');
 const autoprefixer = require('gulp-autoprefixer');
 const clean_css = require('gulp-clean-css');
 const concat = require('gulp-concat');
-const image_resize = require('gulp-image-resize');
-const rename = require('gulp-rename');
-const replace = require('gulp-replace');
-const GOOGLE_API_KEY = require('./keys.config.json').GOOGLE_API_KEY;
 
 const dirs = {
     src: 'src',
@@ -17,7 +13,6 @@ const clean = () => del(['build']);  // del requires it to be a string and not a
 
 const build_html = () => {
     return gulp.src([ `${dirs.src}/public/*.html` ])
-        .pipe(replace('[GOOGLE_API_KEY]', GOOGLE_API_KEY))
         .pipe(gulp.dest(`${dirs.dest}/public/`));
 }
 
