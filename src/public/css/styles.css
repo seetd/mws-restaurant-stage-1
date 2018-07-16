@@ -134,6 +134,10 @@ a svg:focus {
   background-color: #ccc;
 }
 
+.leaflet-container .leaflet-control-attribution {
+    background: rgba(255, 255, 255, 1);
+}
+
 nav a {
   color: #FFF;
 }
