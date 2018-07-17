@@ -12,6 +12,8 @@ export default class RestaurantController {
             mapboxToken: 'pk.eyJ1Ijoib3JlZGkiLCJhIjoiY2ppZHdiNXVwMDBpODNxcXAxdjl4OWVkayJ9.COiDvF28jozGjkmEqo_AYg'
         });
         this.dataService = new DataService(!!navigator.serviceWorker);
+        let form = this.document.getElementById('reviews-form');
+        form.addEventListener("submit", this.addReview);
     }
 
     render() {
@@ -75,6 +77,12 @@ export default class RestaurantController {
         this.fillReviewsHTML(restaurant.reviews);
     }
 
+    addReview(event) {
+        event.preventDefault();
+        console.log('Code to add review here');
+        return false;
+    }
+
     /**
      * Create restaurant operating hours HTML table and add it to the webpage.
      */
@@ -112,7 +120,9 @@ export default class RestaurantController {
             container.appendChild(noReviews);
             return;
         }
-        const ul = this.document.getElementById('reviews-list');
+
+        const ul = this.document.createElement('ul');
+        ul.setAttribute('id', 'reviews-list');
         reviews.forEach(review => {
             ul.appendChild(this.createReviewHTML(review));
         });

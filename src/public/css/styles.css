@@ -86,6 +86,17 @@ section {
   display: block;
 }
 
+button {
+    color: #FFF;
+    display: inline-block;
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
 #maincontent {
   background-color: #f3f3f3;
 }

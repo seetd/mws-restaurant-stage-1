@@ -118,13 +118,22 @@ section {
     text-transform: uppercase;
 }
 
-#reviews-container h2 {
+h2 {
     color: #B26000;
     font-size: 2em;
     font-weight: 300;
     letter-spacing: -1px;
     padding-bottom: 1pt;
 }
+
+#reviews-container {
+    border: 2px solid #f3f3f3;
+    display: block;
+    list-style-type: none;
+    margin: 0 0 30px;
+    padding: 20px 0;
+}
+
 
 #reviews-list li {
     background-color: #fff;
@@ -146,6 +155,61 @@ section {
 
 #restaurant-container label {
     display: none;
+}
+
+select, input, textarea {
+    background-color: white;
+    border: 1px solid #fff;
+    font-family: Arial, sans-serif;
+    font-size: 0.9em;
+    letter-spacing: 0;
+    margin: 10px 0;
+}
+
+select, input, button {
+    height: 35px;
+}
+
+input, textarea, select {
+    width: 100%;
+}
+
+#reviews-form-container {
+    border-top: 1px solid #d9d9d9;
+    margin: 0 0 30px;
+    padding: 20px 0;
+}
+
+#reviews-form {
+    width: 85%;
+    height: auto;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 20px 20px;
+}
+
+#review-reviewer {
+    width: calc(70% - 20px) ;
+    padding: 0 10px;
+}
+
+#review-rating {
+    width: calc(30% - 20px) ;
+    padding: 0 10px;
+}
+
+.review-fullwidth, #review-submit, #review-reset {
+    width: calc(100% - 20px) ;
+    padding: 0 10px;
+}
+
+#review-submit {
+    background-color: #B26000;
+}
+
+#review-reset {
+    background-color: #2C8800;   
 }
 
 @media screen and (min-width: 800px) {
