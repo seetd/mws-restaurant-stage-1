@@ -18,8 +18,12 @@ const allCaches = [
     staticCacheName, dynamicCacheName
 ];
 
+const cacheOptions = {
+    ignoreSearch: true
+};
+
 const loadCacheOrNetwork = (request, requestUrl, isSameOrigin) => 
-    caches.match(request)
+    caches.match(request, cacheOptions)
         .then(response => response || fetch(request).then(
             networkResponse => {
                 // Handle restaurant images missing
@@ -72,13 +76,6 @@ self.addEventListener('fetch', function (event) {
         // they should bascially be the same html
         if (requestUrl.pathname === '/') {
             event.respondWith(caches.match('index.html'));
-            return;
-        }
-
-        // Strip all query parameters so that 'http://localhost:8000/restaurant.html?id=1' 
-        // and 'http://localhost:8000/restaurant.html?id=2' are the same
-        if (requestUrl.pathname.startsWith('/restaurant.html')) {
-            event.respondWith(caches.match('restaurant.html'));
             return;
         }
     }
