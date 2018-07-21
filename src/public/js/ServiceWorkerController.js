@@ -33,8 +33,7 @@ export default class ServiceWorkerController {
 
     register() {
         // Service worker not supported on this browser
-        if (!this.navigator.serviceWorker) return;
-
+        if ('serviceWorker' in this.navigator === false) return;
         this.navigator.serviceWorker.register('/service_worker.js')
             .then((registration) => {
                 // If there is no controller this is a fresh and the page is not loaded via a service worker
@@ -65,7 +64,7 @@ export default class ServiceWorkerController {
             });
 
         let refreshing;
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
+        this.navigator.serviceWorker.addEventListener('controllerchange', () => {
             if (refreshing) return;
             this.window.location.reload();
             refreshing = true;

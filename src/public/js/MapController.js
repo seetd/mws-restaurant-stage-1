@@ -24,7 +24,7 @@ export default class MapController {
     /**
      * Initialize leaflet map, called from HTML.
      */
-    render(options, postConfigure) {
+    render(options) {
         const {
             lat,
             lng,

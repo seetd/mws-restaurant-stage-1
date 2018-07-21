@@ -12,23 +12,24 @@ export default class RestaurantController {
             mapboxToken: 'pk.eyJ1Ijoib3JlZGkiLCJhIjoiY2ppZHdiNXVwMDBpODNxcXAxdjl4OWVkayJ9.COiDvF28jozGjkmEqo_AYg'
         });
         this.dataService = new DataService(!!navigator.serviceWorker);
+        this.id = parseInt(this.getParameterByName('id'));
         let form = this.document.getElementById('reviews-form');
-        form.addEventListener("submit", this.addReview);
+        form.addEventListener("submit", (event) => this.addReview(event));
     }
 
-    render() {
+    render(isRefresh=false) {
         return this.dataService
-            .fetch()
-            .then(restaurants => {
-                const id = parseInt(this.getParameterByName('id'));
-                const restaurant = this.dataService.getByRestaurantId(id, restaurants);
+            .getByRestaurantId(this.id)
+            .then(restaurant => {
                 if (!restaurant) {
-                    throw `Restaurant Id: ${id} is not valid`
-                }
-
+                    throw `Restaurant Id: ${this.id} is not valid`
+                }                
                 this.fillBreadcrumb(restaurant);
                 this.renderRestaurant(restaurant);
-                this.renderMap(restaurant);                
+                const reviewErrors = this.document.getElementById('review-errors');
+                reviewErrors.innerHTML = '';
+                if (reviewErrors.childNodes.length > 0) reviewErrors.removeChild(reviewErrors.childNodes[0]);
+                if(!isRefresh) this.renderMap(restaurant, isRefresh);
             })
             .catch(error => console.log(error));
     }
@@ -43,6 +44,7 @@ export default class RestaurantController {
             id: 'mapbox.streets'
         });
 
+        this.mapController.clearMarkers();
         this.mapController.addMarker(restaurant);
     }
 
@@ -77,9 +79,71 @@ export default class RestaurantController {
         this.fillReviewsHTML(restaurant.reviews);
     }
 
-    addReview(event) {
+    async addReview(event) {
         event.preventDefault();
-        console.log('Code to add review here');
+        const name = this.document.getElementById('name');
+        const rating = this.document.getElementById('rating');
+        const comments = this.document.getElementById('comments');
+        const reviewErrors = this.document.getElementById('review-errors');
+        const errors = await this.dataService.addReview({
+            restaurant_id: this.id,
+            name: name.value,
+            rating: rating.value,
+            comments: comments.value,
+        });
+
+        if (errors.length === 0) {
+            name.value = '';
+            rating.value = '';
+            comments.value = '';
+            name.setAttribute('aria-invalid', 'false');
+            rating.setAttribute('aria-invalid', 'false');
+            comments.setAttribute('aria-invalid', 'false');
+            if (reviewErrors.childNodes.length > 0) reviewErrors.removeChild(reviewErrors.childNodes[0]);
+        } else {
+            const container = this.document.createElement('div');
+            container.id = 'review-errors-container';
+            const header = this.document.createElement('p');
+            header.id = 'review-errors-header';
+            header.innerText = `${errors.length} error${errors.length > 1 ? 's': ''} are found in the submission.`
+            container.appendChild(header);
+            const list = this.document.createElement('ul');
+            errors.forEach(error => {
+                const item = this.document.createElement('li');
+                let text;
+                switch(error) {
+                    case 'name':
+                        text = 'name cannot be null or empty';
+                        name.setAttribute('aria-invalid', 'true');
+                        break;
+                    case 'rating':
+                        text = 'rating cannot be null or empty';
+                        rating.setAttribute('aria-invalid', 'true');
+                        break;
+                    case 'comments':
+                        text = 'comments cannot be null or empty';
+                        comments.setAttribute('aria-invalid', 'true');
+                        break;
+                    case 'fetch':
+                        text = 'Network connection is unavailable. Data will be resent when the connection is available.';  
+                        name.value = '';
+                        rating.value = '';
+                        comments.value = '';
+                        break;                                          
+                }
+                item.innerText = text;
+                list.appendChild(item);
+            });
+            container.appendChild(list);
+            const existingContainer = this.document.getElementById('review-errors-container');
+            if (existingContainer) {
+                reviewErrors.replaceChild(container, existingContainer);
+            } else {
+                reviewErrors.appendChild(container);
+            }
+        }
+        this.fillReviewsHTML(await this.dataService.getCachedReviews(this.id));
+        name.focus();
         return false;
     }
 
@@ -90,6 +154,7 @@ export default class RestaurantController {
         const hours = this.document.getElementById('restaurant-hours');
         hours.setAttribute("aria-label", "restaurant hours");
         hours.tabIndex = "0";
+        hours.innerHTML = '';
         for (let key in operatingHours) {
             const row = this.document.createElement('tr');
             row.tabIndex = "0";
@@ -110,6 +175,7 @@ export default class RestaurantController {
      */
     fillReviewsHTML(reviews) {
         const container = this.document.getElementById('reviews-container');
+        container.innerHTML = '';
         const title = this.document.createElement('h2');
         title.innerHTML = 'Reviews';
         container.appendChild(title);
@@ -139,9 +205,11 @@ export default class RestaurantController {
         name.innerHTML = review.name;
         li.appendChild(name);
 
-        const date = this.document.createElement('p');
-        date.innerHTML = review.date;
-        li.appendChild(date);
+        if (review.updatedAt) {
+            const date = this.document.createElement('p');
+            date.innerHTML = `Updated: ${review.updatedAt.toDateString()}`;
+            li.appendChild(date);
+        }
 
         const rating = this.document.createElement('p');
         rating.innerHTML = `Rating: ${review.rating}`;
@@ -159,7 +227,17 @@ export default class RestaurantController {
      */
     fillBreadcrumb(restaurant) {
         const breadcrumb = this.document.getElementById('breadcrumb');
-        const li = this.document.createElement('li');
+        breadcrumb.innerHTML = '';
+
+        let li = this.document.createElement('li');
+        let a = this.document.createElement('a');
+        a.setAttribute('href', '/');
+        a.setAttribute('aria-label', 'home link');
+        a.innerText = 'Home';
+        li.appendChild(a);
+        breadcrumb.appendChild(li);
+
+        li = this.document.createElement('li');
         li.innerHTML = restaurant.name;
         breadcrumb.appendChild(li);
     }

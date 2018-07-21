@@ -31,9 +31,6 @@
         </nav>
         <!-- Beginning breadcrumb -->
         <ul id="breadcrumb">
-            <li>
-                <a href="/" aria-label="home link">Home</a>
-            </li>
         </ul>
         <!-- End breadcrumb -->
         <!-- End nav -->
@@ -58,15 +55,18 @@
             <section id="reviews-form-container" tabindex="0" aria-label="add new review">
                 <h2>Add a Review</h2>
                 <form id="reviews-form">
-                    <div id="review-reviewer">
-                        <label for="reviewer">Your Name:</label>
+                    <div id="review-errors" role="alert" aria-atomic="true" style="width: 100%">
+                    </div>                    
+                    <div id="review-name">
+                        <label for="name">Your Name <span class="review-required">(required)</span>:</label>
                         <br>
-                        <input name="reviewer" type="text" id="reviewer">
+                        <input name="name" type="text" id="name" autocomplete="name" aria-required="true">
                     </div>
                     <div id="review-rating">
-                        <label for="rating">Rating:</label>
+                        <label for="rating">Rating <span class="review-required">(required)</span>:</label>
                         <br>
-                        <select name="rating" id="rating">
+                        <select name="rating" id="rating" aria-required="true" autocomplete="off">
+                            <option value="" selected disabled hidden>Choose Rating</option>
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -75,9 +75,9 @@
                         </select>
                     </div>
                     <div class="review-fullwidth">
-                        <label for="comments">Comments:</label>
+                        <label for="comments">Comments <span class="review-required">(required)</span>:</label>
                         <br>
-                        <textarea id="comments" name="comments" rows="10" column="100"></textarea>
+                        <textarea id="comments" name="comments" rows="10" column="100" aria-required="true"></textarea>
                     </div>
                     <div class="review-fullwidth" style="display: flex; justify-content: space-around">
                         <button type="submit" value="Submit" id="review-submit">Send Comment</button>

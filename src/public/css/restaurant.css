@@ -189,14 +189,19 @@ input, textarea, select {
     padding: 0 20px 20px;
 }
 
-#review-reviewer {
-    width: calc(70% - 20px) ;
+#review-name {
+    width: calc(50% - 20px) ;
     padding: 0 10px;
 }
 
 #review-rating {
-    width: calc(30% - 20px) ;
+    width: calc(50% - 20px) ;
     padding: 0 10px;
+}
+
+.review-required {
+    color: red;
+    font-size: 14;
 }
 
 .review-fullwidth, #review-submit, #review-reset {
@@ -210,6 +215,21 @@ input, textarea, select {
 
 #review-reset {
     background-color: #2C8800;   
+}
+
+#review-errors-container {
+    margin: 0 10px 20px;
+    background-color: white;
+    padding: 0 0 10px;
+}
+
+#review-errors-header {
+    background: #b26000;
+    font-weight: bold;
+    color: white;
+    margin: 0;
+    text-align: center;
+    padding: 5px 0;
 }
 
 @media screen and (min-width: 800px) {

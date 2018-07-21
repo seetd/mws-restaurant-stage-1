@@ -111,7 +111,7 @@ export default class IndexController {
         const neighborhood = nSelect[nIndex].value;
 
         return this.dataService
-            .fetch()
+            .getAllRestaurants()
             .then(restaurants => {
                 const filtered = this.dataService.filterRestaurantsByCuisineAndNeighborhood(restaurants, cuisine, neighborhood)
                 resolve(filtered);
@@ -119,15 +119,18 @@ export default class IndexController {
             .catch(error => reject(error));     
     }
 
-    render() {
-        this.mapController.render({
-            lat: 40.722216,
-            lng: -73.987501,
-            zoom: 12,
-            scrollWheelZoom: false,
-            maxZoom: 18,
-            id: 'mapbox.streets'
-        });
+    render(isRefresh=false) {
+        if(!isRefresh) {
+            this.mapController.render({
+                lat: 40.722216,
+                lng: -73.987501,
+                zoom: 12,
+                scrollWheelZoom: false,
+                maxZoom: 18,
+                id: 'mapbox.streets'
+            });
+        }
+
         this.fetchRestaurantByCuisineAndNeighborhood(
             restaurants => {
                 this.renderRestaurants(restaurants);

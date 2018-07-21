@@ -69,6 +69,10 @@ self.addEventListener('activate', function (event) {
     );
 });
 
+self.addEventListener('sync', function(event) {
+    console.log(event);
+});
+
 self.addEventListener('fetch', function (event) {
     const requestUrl = new URL(event.request.url);
     if (requestUrl.origin === location.origin) {
@@ -80,7 +84,7 @@ self.addEventListener('fetch', function (event) {
         }
     }
 
-    if (event.request.url.startsWith('http://localhost:1337/restaurants')) {
+    if (event.request.url.startsWith('http://localhost:1337')) {
         // avoid caching the API calls as those will be handle by IDB
         return;
     }
