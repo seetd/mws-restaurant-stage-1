@@ -15,12 +15,20 @@ import DataService from './DataService';
     /**
      * Fetch neighborhoods and cuisines as soon as the page is loaded.
      */
-    document.addEventListener('DOMContentLoaded', (event) => {
-        controller.render();
+    document.addEventListener('DOMContentLoaded', async (event) => {
+        const message = await dataService.sync();
         if (supportsNotifications && Notification.permission === "default") {
             Notification.requestPermission().then(function(result) {
             });
         }
+        if (message) {
+            if (supportsNotifications && Notification.permission === "granted") {
+                new Notification(message);
+            } else {
+                console.log(message);
+            }             
+        }    
+        controller.render();    
     });
 
     // Using online event handler as I consider it a lesser evil compared to polling

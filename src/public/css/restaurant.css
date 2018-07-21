@@ -189,16 +189,6 @@ input, textarea, select {
     padding: 0 20px 20px;
 }
 
-#review-name {
-    width: calc(50% - 20px) ;
-    padding: 0 10px;
-}
-
-#review-rating {
-    width: calc(50% - 20px) ;
-    padding: 0 10px;
-}
-
 .review-required {
     color: red;
     font-size: 14;
