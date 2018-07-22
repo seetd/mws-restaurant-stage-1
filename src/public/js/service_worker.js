@@ -13,7 +13,8 @@ const staticUrls = [
     'img/star-solid.svg',
     'img/noimage.png',
     'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
-    'https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff'
+    'https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff',
+    'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js'
 ];
 
 const allCaches = [

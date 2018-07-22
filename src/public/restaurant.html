@@ -6,8 +6,6 @@
     <meta name="theme-color" content="#B26000" />
     <meta name="Description" content="Detail of selected restaurant including operating hours, cuisine, address and customer reviews.">
     <!-- Main CSS file -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
-        crossorigin="" />
     <link rel="stylesheet" href="css/restaurant.min.css" type="text/css">
     <link rel="manifest" href="manifest.json">
     <title>Restaurant Info</title>
@@ -50,9 +48,9 @@
                             </svg>
                             <svg width="20px" height="20px" id="restaurant-favorite-svg-regular">
                                 <use xlink:href="img/star-regular.svg#regular" />
-                            </svg>                            
+                            </svg>
                         </a>
-                    </span>                    
+                    </span>
                     <span id="restaurant-name"></span>
                 </h1>
                 <img id="restaurant-img">
@@ -68,14 +66,16 @@
                 <h2>Add a Review</h2>
                 <form id="reviews-form">
                     <div id="review-errors" role="alert" aria-atomic="true" style="width: 100%">
-                    </div>                    
+                    </div>
                     <div class="review-fullwidth">
-                        <label for="name">Your Name <span class="review-required">(required)</span>:</label>
+                        <label for="name">Your Name
+                            <span class="review-required">(required)</span>:</label>
                         <br>
                         <input name="name" type="text" id="name" autocomplete="name" aria-required="true">
                     </div>
                     <div class="review-fullwidth">
-                        <label for="rating">Rating <span class="review-required">(required)</span>:</label>
+                        <label for="rating">Rating
+                            <span class="review-required">(required)</span>:</label>
                         <br>
                         <select name="rating" id="rating" aria-required="true" autocomplete="nope">
                             <option value="" selected disabled hidden>Choose Rating</option>
@@ -87,7 +87,8 @@
                         </select>
                     </div>
                     <div class="review-fullwidth">
-                        <label for="comments">Comments <span class="review-required">(required)</span>:</label>
+                        <label for="comments">Comments
+                            <span class="review-required">(required)</span>:</label>
                         <br>
                         <textarea id="comments" name="comments" rows="10" column="100" aria-required="true"></textarea>
                     </div>
@@ -115,7 +116,14 @@
         </a> All Rights Reserved.
     </footer>
     <!-- End footer -->
-
+    <!-- Leaflet styles move to bottom to improve performance -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+        crossorigin="" />
+    <style>
+        .leaflet-container .leaflet-control-attribution {
+            background: rgba(255, 255, 255, 1);
+        }
+    </style>
     <!-- Beginning scripts -->
     <!-- Main javascript file -->
     <script type="text/javascript" src="js/restaurant.js" defer></script>
