@@ -14,7 +14,9 @@ export default class RestaurantController {
         this.dataService = new DataService(!!navigator.serviceWorker);
         this.id = parseInt(this.getParameterByName('id'));
         let form = this.document.getElementById('reviews-form');
-        form.addEventListener("submit", (event) => this.addReview(event));
+        form.addEventListener('submit', (event) => this.addReview(event));
+        let favoriteAnchor = this.document.getElementById('restaurant-favorite-anchor');
+        favoriteAnchor.addEventListener('click', (event) => this.toggleFavorite(event));
     }
 
     render(isRefresh=false) {
@@ -23,7 +25,8 @@ export default class RestaurantController {
             .then(restaurant => {
                 if (!restaurant) {
                     throw `Restaurant Id: ${this.id} is not valid`
-                }                
+                }
+                this.restaurant = restaurant;
                 this.fillBreadcrumb(restaurant);
                 this.renderRestaurant(restaurant);
                 const reviewErrors = this.document.getElementById('review-errors');
@@ -31,7 +34,7 @@ export default class RestaurantController {
                 if (reviewErrors.childNodes.length > 0) reviewErrors.removeChild(reviewErrors.childNodes[0]);
                 if(!isRefresh) this.renderMap(restaurant, isRefresh);
             })
-            .catch(error => console.log(error));
+            .catch(error => console.log(`render: ${error}`));
     }
 
     renderMap(restaurant) {
@@ -53,6 +56,21 @@ export default class RestaurantController {
         name.innerHTML = restaurant.name;
         name.tabIndex = "0";
         name.setAttribute("aria-label", `Name ${restaurant.name}`);
+    
+        const favoriteAnchor = this.document.getElementById('restaurant-favorite-anchor');
+        let favoriteAnchorMessage;
+        const favoriteImageSolid = this.document.getElementById('restaurant-favorite-svg-solid'); 
+        const favoriteImageRegular= this.document.getElementById('restaurant-favorite-svg-regular'); 
+        if (restaurant.is_favorite === 'true' || restaurant.is_favorite === true) {
+            favoriteImageSolid.setAttribute('style', 'display: inline;');
+            favoriteImageRegular.setAttribute('style', 'display: none;');
+            favoriteAnchorMessage = 'Remove this restaurant from favorite';
+        } else {
+            favoriteImageSolid.setAttribute('style', 'display: none;');
+            favoriteImageRegular.setAttribute('style', 'display: inline;');
+            favoriteAnchorMessage = 'Make this restaurant a favorite';
+        }
+        favoriteAnchor.setAttribute('aria-label', favoriteAnchorMessage);
 
         const address = this.document.getElementById('restaurant-address');
         address.innerHTML = restaurant.address;
@@ -77,6 +95,17 @@ export default class RestaurantController {
 
         // fill reviews
         this.fillReviewsHTML(restaurant.reviews);
+    }
+
+    async toggleFavorite(event) {
+        event.preventDefault();
+        try {
+            await this.dataService.toggleRestaurantFavorite(this.restaurant.id, this.restaurant.is_favorite);
+        } catch (error) {
+            console.log(error);
+        }
+        this.render(true);  
+        return false; 
     }
 
     async addReview(event) {

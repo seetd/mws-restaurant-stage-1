@@ -10,20 +10,21 @@ const POST_HEADERS = {
 };
 
 const openDatabase = () => {
-    return idb.open(DATABASE, 1, function (upgradeDb) {
-        if (!upgradeDb.objectStoreNames.contains(RESTAURANTS_STORE)) {
-            const restaurants = upgradeDb.createObjectStore(RESTAURANTS_STORE, {
-                keyPath: 'id'
-            });
-        }        
-
-        if (!upgradeDb.objectStoreNames.contains(REVIEWS_STORE)) {
-            const reviews = upgradeDb.createObjectStore(REVIEWS_STORE, {
-                keyPath: 'id'
-            });
-            reviews.createIndex('restaurants', 'restaurant_id', {unique: false});
-            reviews.createIndex('synced', 'synced', {unique: false});
-        }
+    return idb.open(DATABASE, 2, function (upgradeDb) {
+        switch(upgradeDb.oldVersion) {
+            case 0:
+                upgradeDb.createObjectStore(RESTAURANTS_STORE, {
+                    keyPath: 'id'
+                });
+            case 1:
+                const reviews = upgradeDb.createObjectStore(REVIEWS_STORE, {
+                    keyPath: 'id'
+                });
+                reviews.createIndex('restaurants', 'restaurant_id', {unique: false});
+                reviews.createIndex('synced', 'synced', {unique: false});
+                const restaurants = upgradeDb.transaction.objectStore(RESTAURANTS_STORE);
+                restaurants.createIndex('synced', 'synced', {unique: false});
+          }
     });
 };
 
@@ -114,6 +115,7 @@ const objectByIdCacheService = (getStoreData, storename, id) => {
         try {
             data = await networkService();
             const store = getStore(storename, 'readwrite')(dbService);
+            data.synced = 1;
             store.put(data);
         } catch (error) {
             data = await getStoreData(dbService, storename, id);
@@ -146,13 +148,26 @@ export default class DataService {
     }
 
     async sync() {
-        let synced = [];
+        let storeRestaurants, storeReviews, unsyncedRestaurants, unsyncedReviews, isFavorite;
+        let syncedReviews = [], syncedRestaurants = [];
         const dbService = await openDatabase();
-        let store = getStore(REVIEWS_STORE)(dbService).index('synced');
-        const unsynced = await store.getAll(0);
         try {
+            storeRestaurants = getStore(RESTAURANTS_STORE)(dbService).index('synced');
+            unsyncedRestaurants = await storeRestaurants.getAll(0);
+            for (const restaurant of unsyncedRestaurants) {
+                isFavorite = (restaurant.is_favorite === 'true' || restaurant.is_favorite === true ? true : false);    // Handle API saving the values as strings after update
+                restaurant = await request(`${ENDPOINT}/restaurants/${restaurant.id}/?is_favorite=${isFavorite}`, 'PUT');
+                if (restaurant) {
+                    // Check for result null which is returned by PreFlight OPTIONS call due to cross domain access
+                    restaurant.synced = 1;
+                    syncedRestaurants.push(restaurant);
+                }
+            }
+
             let unsyncedId, result;
-            for (const review of unsynced) {
+            storeReviews = getStore(REVIEWS_STORE)(dbService).index('synced');
+            unsyncedReviews = await storeReviews.getAll(0);
+            for (const review of unsyncedReviews) {
                 // cannot use foreach since that will not allow async/await
                 unsyncedId = review.id;
                 transformForFetch(review);
@@ -162,30 +177,32 @@ export default class DataService {
                     transformForClient(result);
                     result.synced = 1;
                     result.unsyncedId = unsyncedId;
-                    synced.push(result);  
-                } 
+                    syncedReviews.push(result);  
+                }
             }
-        } catch(error) { 
-        }
+        } catch(error) { }
 
-        if (synced.length > 0) {
-            store = getStore(REVIEWS_STORE, 'readwrite')(dbService);
-            synced.forEach((review) => {
-                store.delete(review.unsyncedId);
-                delete review.unsyncedId;
-                store.put(review);
+        if (syncedRestaurants.length > 0) {
+            storeRestaurants = getStore(RESTAURANTS_STORE, 'readwrite')(dbService);
+            syncedRestaurants.forEach((restaurants) => {
+                storeRestaurants.put(restaurants);
             })
         }
 
-        if (unsynced.length === 0) {
+        if (syncedReviews.length > 0) {
+            storeReviews = getStore(REVIEWS_STORE, 'readwrite')(dbService);
+            syncedReviews.forEach((review) => {
+                storeReviews.delete(review.unsyncedId);
+                delete review.unsyncedId;
+                storeReviews.put(review);
+            })
+        }
+
+        if (unsyncedRestaurants.length === 0 && unsyncedReviews.length === 0) {
             return null;
         }
 
-        if (synced.length !== unsynced.length) {
-            return `Partially completed syncing ${synced.length} / ${unsynced.length} reviews`;
-        }
-
-        return `Completed syncing ${synced.length} reviews`;
+        return `Server sync completed. ${syncedRestaurants.length + syncedReviews.length} item(s).`;
     }
 
     async getCachedReviews(id) {
@@ -336,6 +353,25 @@ export default class DataService {
         });
     }
 
+    async toggleRestaurantFavorite(id, isFavorite) {
+        let restaurant;
+        isFavorite = (isFavorite === 'true' || isFavorite === true ? false : true);    // Toggling state so reversing the value
+        try {
+            restaurant = await request(`${ENDPOINT}/restaurants/${id}/?is_favorite=${isFavorite}`, 'PUT');
+            if (!restaurant) return; // CORS Prefetch OPTIONS skip
+        } catch (error) {
+        }
+
+        const dbService = await openDatabase();
+        const store = getStore(RESTAURANTS_STORE, 'readwrite')(dbService);
+        if (!restaurant) {
+            restaurant = await store.get(id);
+            restaurant.synced = 0;
+            restaurant.is_favorite = isFavorite;
+        }
+        store.put(restaurant);
+    }
+
     /**
      * Filter the supplied restaurants list by supplied cuisine and neighbourhood
      * @param {*} restaurants 
@@ -357,7 +393,7 @@ export default class DataService {
      * Restaurant page URL.
      */
     urlForRestaurant(restaurant) {
-        return (`./restaurant.html?id=${restaurant.id}`);
+        return (`/restaurant.html?id=${restaurant.id}`);
     }
 
     /**

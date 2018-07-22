@@ -1,4 +1,4 @@
-const staticCacheName = 'rr-static-v2';
+const staticCacheName = 'rr-static-v3';
 const dynamicCacheName = 'rr-dynamic';
 
 const staticUrls = [
@@ -9,6 +9,8 @@ const staticUrls = [
     'css/index.min.css',
     'css/restaurant.min.css',
     'img/logo.svg',
+    'img/star-regular.svg',
+    'img/star-solid.svg',
     'img/noimage.png',
     'https://fonts.gstatic.com/s/roboto/v15/2UX7WLTfW3W8TclTUvlFyQ.woff',
     'https://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOD8E0i7KZn-EPnyo3HZu7kw.woff'

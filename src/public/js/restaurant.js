@@ -16,18 +16,20 @@ import DataService from './DataService';
      * Fetch restaurant and reviews as soon as the page is loaded.
      */
     document.addEventListener('DOMContentLoaded', async (event) => {
-        // This sync will handle browsers that do not support online event and also when server is down without polling
-        const message = await dataService.sync();
-        if (supportsNotifications && Notification.permission === "default") {
-            Notification.requestPermission().then(function(result) {
-            });
-        } 
-        if (message) {
-            if (supportsNotifications && Notification.permission === "granted") {
-                new Notification(message);
-            } else {
-                console.log(message);
-            }             
+        if(navigator.onLine) {
+            // This sync will handle browsers that do not support online event and also when server is down without polling
+            const message = await dataService.sync();
+            if (supportsNotifications && Notification.permission === "default") {
+                Notification.requestPermission().then(function(result) {
+                });
+            } 
+            if (message) {
+                if (supportsNotifications && Notification.permission === "granted") {
+                    new Notification(message);
+                } else {
+                    console.log(`DOMContentLoaded: ${message}`);
+                }             
+            }
         }
         controller.render();
     });
@@ -39,7 +41,7 @@ import DataService from './DataService';
         if (supportsNotifications && Notification.permission === "granted") {
             new Notification(message);
         } else {
-            console.log(message);
+            console.log(`online: ${message}`);
         }    
         controller.render(true);        
     });    

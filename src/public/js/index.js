@@ -16,18 +16,22 @@ import DataService from './DataService';
      * Fetch neighborhoods and cuisines as soon as the page is loaded.
      */
     document.addEventListener('DOMContentLoaded', async (event) => {
-        const message = await dataService.sync();
-        if (supportsNotifications && Notification.permission === "default") {
-            Notification.requestPermission().then(function(result) {
-            });
+        if(navigator.onLine) {
+            // This sync will handle browsers that do not support online event and also when server is down without polling
+            const message = await dataService.sync();
+            if (supportsNotifications && Notification.permission === "default") {
+                Notification.requestPermission().then(function(result) {
+                });
+            }
+            if (message) {
+                if (supportsNotifications && Notification.permission === "granted") {
+                    new Notification(message);
+                } else {
+                    console.log(message);
+                }             
+            }              
         }
-        if (message) {
-            if (supportsNotifications && Notification.permission === "granted") {
-                new Notification(message);
-            } else {
-                console.log(message);
-            }             
-        }    
+  
         controller.render();    
     });
 
