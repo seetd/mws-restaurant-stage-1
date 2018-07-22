@@ -38,7 +38,7 @@ The project structure has been modified to allow the use of Gulp to bundle the j
     │   │   ├── 8.jpg - Image file for restaurant
     │   │   ├── 9.jpg - Image file for restaurant
     │   │   └── logo.svg - Image file for Logo of site
-    │   ├── index.html - Skeleton html for index\ page
+    │   ├── index.html - Skeleton html for index page
     │   ├── js
     │   │   ├── DataService.js - File containing the javascript to manipulate and fetch data
     │   │   ├── IndexController.js - File containing the javascript to manipulate the html in index.html
@@ -46,13 +46,14 @@ The project structure has been modified to allow the use of Gulp to bundle the j
     │   │   ├── RestaurantController.js - File containing the javascript to manipulate the html in restaurant.html
     │   │   ├── ServiceWorkerController.js - File containing the javascript code for handling lifecycle 
     │   │   ├── Toast.js - Javascript file for a simple toast used by both index.html and restaurant.html 
-    │   │   ├── index.js - Javascript file used by index.html
-    │   │   ├── restaurant.js - Javascript file used by restaurant.html
+    │   │   ├── index.js - Javascript file used by index.html. Includes Notification API code
+    │   │   ├── restaurant.js - Javascript file used by restaurant.html. Includes Notification API code
     │   │   └── service_worker.js - File containing the javascript code for the service worker
     │   ├── manifest.json - The web app manifest is a simple JSON file that tells the browser about your 
-                            web application and how it should behave when 'installed' on the users mobile 
-                            device or desktop.
-    │   ├── restaurant.html - Skeleton html for restaurant information page
+    │   │                   web application and how it should behave when 'installed' on the users mobile 
+    │   │                   device or desktop.
+    │   ├── restaurant.html - Skeleton html for restaurant information page. Allows adding of Reviews and making the 
+    │   │                     restaurant a favorite. Stage 3 changes are mainly found here.
     │   └── templates
     │       └── toast.template.html - Template file containing HTML for Toast
     └── server.js - This file contains the code to serve this application using Node.js                            
@@ -65,3 +66,4 @@ The project structure has been modified to allow the use of Gulp to bundle the j
 3. Run `npm run build` in the application folder. This will setup a watcher on the src folder to rebundle when changes occur.
 4. Open a new terminal and run `npm run start:dev`
 5. With your server running, visit the site: `http://localhost:8000`
+6. Accept the Prompt for notification API. That can be revoke in the browser when evaluation is completed
